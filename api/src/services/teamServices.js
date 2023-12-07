@@ -125,7 +125,7 @@ teamServices.inviteUserByEmail = async (
   return newUser;
 };
 
-teamServices.scrumGetTeam = async (userId, role = "admin") => {
+teamServices.scrumGetTeam = async (userId, role) => {
   const existScrum = await UserTeam.findOne({
     where: {
       userId,
@@ -156,6 +156,6 @@ teamServices.scrumGetTeam = async (userId, role = "admin") => {
 
     return teams;
   }
-};
+};    
 
 module.exports = teamServices;
