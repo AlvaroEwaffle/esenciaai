@@ -3,3 +3,4 @@ stream.py
 __pycache__
 .env
 test.ipynb
+data_load.json

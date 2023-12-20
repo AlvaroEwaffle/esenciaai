@@ -32,49 +32,49 @@ def testing(user_id, team_id):
       if daily_check == "null":
             return f"ok, {daily_check}"
       else:
-            return f"fail, {daily_check}"
-      #return json.loads(daily_check)
+           return json.loads(daily_check)
 
 @app.post("/daily_survey")
 async def add_daily_survey(survey:dailySurvey):
-        current_date = str(date.today())
-        #current_date = "2023-12-07"  
-        try:
-            daily_check = json_util.dumps(db["survey_data"].find_one({
+    current_date = str(date.today())
+    #current_date = "2023-12-07"
+    try:
+        daily_check = json_util.dumps(db["survey_data"].find_one({
                 "team_id": survey.team_id,
                 f"daily_survey.{current_date}.survey":{"$elemMatch":{"user_id":survey.user_id}}
                 }))
-            if daily_check == "null":   
-                db["survey_data"].update_one(filter={
+        if daily_check == "null":
+            db["survey_data"].update_one(filter={
                 "team_id": survey.team_id
-                }, update={
-                "$push":{
-                f"daily_survey.{current_date}.survey": {
-                "user_id": survey.user_id,
-                "sprint": survey.sprint,
-                "question1": survey.question1,
-                "question2": survey.question2,
-                "question3": survey.question3,
-                "question4": survey.question4,
-                "comment": {"content": survey.comment}}
-                }, 
-                "$inc":{"daily_survey_count": 1, 
-                "self_satisfaction_general": survey.question1,
-                "work_engagement_general": survey.question2,
-                "team_collaboration_general": survey.question3,
-                "workspace_general": survey.question4,
-                f"daily_survey.{current_date}.self_satisfaction": survey.question1,
-                f"daily_survey.{current_date}.work_engagement": survey.question2,
-                f"daily_survey.{current_date}.team_collaboration": survey.question3,
-                f"daily_survey.{current_date}.workspace": survey.question4
-                },
-                "$set":{"retro_count":0, "reports_count":0}
-                }, upsert=True)
-                return {"status":200}
-            else:
-                return {"status":400, "msg": "user already completed the survey"}
-        except Exception as e:
-            return {"status":422, "error":e }
+            }, update={
+            "$push":{
+            f"daily_survey.{current_date}.survey": {
+             "user_id": survey.user_id,
+             "sprint": survey.sprint,
+             "question1": survey.question1,
+             "question2": survey.question2,
+             "question3": survey.question3,
+             "question4": survey.question4,
+             "comment": {"content": survey.comment}}
+              }, 
+            "$inc":{"daily_survey_count": 1, 
+              "self_satisfaction_general": survey.question1,
+              "work_engagement_general": survey.question2,
+              "team_collaboration_general": survey.question3,
+              "workspace_general": survey.question4,
+              f"daily_survey.{current_date}.self_satisfaction": survey.question1,
+              f"daily_survey.{current_date}.work_engagement": survey.question2,
+              f"daily_survey.{current_date}.team_collaboration": survey.question3,
+              f"daily_survey.{current_date}.workspace": survey.question4,
+              f"daily_survey.{current_date}.sprint_general": survey.sprint
+              },
+              "$setOnInsert": {"retro_count":0}
+            }, upsert=True)
+            return "Ok"
+        else:
+            return "user already completed the survey"
+    except Exception as e:
+        return str(e)
 
 @app.put("/daily_survey/comment")
 async def add_daily_survey(user_id:str, team_id:str, comment:str = None):
@@ -104,7 +104,7 @@ async def retro_survey(retro:RetroItem):
                 "$push": {
                     "retro": {
                     "sprint": retro.sprint,
-                    "date": (date.today()),
+                    "date": "2023-12-18",
                     "c1": c1_serialized,
                     "c2": c2_serialized,
                     "c3": c3_serialized,
@@ -139,6 +139,7 @@ async def get_retro(team_id):
 async def getall_dash_data(team_id):
         result = json_util.dumps(db["survey_data"].find({"team_id": team_id},{"_id":0}))
         result = json.loads(result)[0]
+        
         try:
             retro_count = result["retro_count"]
         except:
