@@ -92,3 +92,16 @@ shows you the API documentation in json format
 	"team_id": "string"
 }
 </pre>
+
+<h2>/get_long_recommendation</h2>
+<pre>
+{
+    "/get_long_recommendation": {
+    "method": "GET",
+    "description": "retrieve the long recommendation",
+    "query_input": {
+                    "team_id": "string"
+                    }
+        }
+}
+</pre>
