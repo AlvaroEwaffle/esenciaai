@@ -4,7 +4,7 @@
 <p align="center"><img src="img\esencia_architecture2.png" width=800 height="auto"></p>
 
 <h2>Database</h2>
-<p>Mongodb database hosted in Mongodb Atlas on a serverless cluster, the schema is "Embedded Documetes",
+<p>Mongodb database hosted in Mongodb Atlas on a serverless cluster, the schema is "Embedded Documents",
 it has one collection for each team with all the information in it.</p>
 
 <pre>
@@ -22,6 +22,7 @@ short_recommendation (dict)
 retro (array)
 recommendation (dict)
 </pre>
+[you can find how to deploy this in mongodbAtlas here.](api_mongo/mongodb_atlas_database.md)
 
 <h2>API Rest</h2>
 It is a serverless http rest api hosted in gcp, using cloud functions.
